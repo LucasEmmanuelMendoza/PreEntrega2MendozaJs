@@ -7,8 +7,7 @@ class Producto{
     }
 
     mostrarProducto(){
-        console.log("Nombre: "+this.nombre +"\nCategoria: "+this.categoria + "\nPrecio: $" +this.precio+ "\nCantidad disponible: "+this.stock);
-        //alert("Nombre: "+this.nombre +"\nCategoria: "+this.categoria + "\nPrecio: $" +this.precio+ "\nCantidad disponible: "+this.stock);
+        console.log(`Nombre: ${this.nombre}\nCategoria: ${this.categoria}\nPrecio: ${this.precio}\nCantidad disponible: ${this.stock}`);
     }
 
     venderProducto(cantidad){
@@ -59,11 +58,10 @@ function ModificarStock(productos){
                 else{
                     let cont = parseInt(prompt('Usted está a punto de ingresar un nuevo producto. ¿Desea continuar? 1-Si | 2-No'));
                     if(cont == 1){
-                        let nombre = prompt('Ingrese el nombre del producto');
-                        let categoria = prompt('Ingrese la categoría del producto');
+                        let categoria = prompt(`Nombre del nuevo producto: ${prod}\nIngrese la categoría del producto`);
                         let precio = parseFloat(prompt('Ingrese el precio del producto'));
                         let stock = parseInt(prompt('Ingrese la cantidad de unidades del producto'));
-                        let producto = new Producto(nombre, categoria, precio, stock);
+                        let producto = new Producto(prod, categoria, precio, stock);
                         productos.push(producto); 
                     }else{
                         break;
@@ -74,14 +72,13 @@ function ModificarStock(productos){
             case 2:
                 console.table(productos);
                 let indice1 = parseInt(prompt('Ingrese el índice del producto que desea eliminar: '));
-                while(indice1 < 0){
-                    indice1 = parseInt('ERROR! Ingrese un índice válido');
+                while((indice1 < 0) || (indice1 >= productos.length)){
+                    indice1 = parseInt(prompt('ERROR! Ingrese un índice válido'));
                 }
                 if (Validar(0, productos.length, indice1)){
                     let cant = parseInt(prompt('¿Cuántas unidades desea eliminar?'));
-                    //chequear cant <= stock actual
                     while(cant > productos[indice1].stock){
-                        cant = parseInt(prompt('¡No puede eliminar más productos de los que hay en stock!\n¿Cuántas unidades desea eliminar?'));
+                        cant = parseInt(prompt(`¡No puede eliminar más productos de los que hay en stock!\nStock Actual: ${productos[indice1].stock} \n¿Cuántas unidades desea eliminar?`));
                     }
                     productos[indice1].venderProducto(cant);
                 }
@@ -100,30 +97,33 @@ function Filtrar (productos, filtro){
      
     switch(filtro){
         case 1:
-            let nombre = prompt('Ingrese el nombre del producto:');
-            productos.forEach((prod) => {
-                if(productos.includes(nombre)){
-                    prod.mostrarProducto();
-                }
-            });
+            let nombreIngresado = prompt('Ingrese el nombre del producto:');
+            
+            const listaFiltrada = productos.filter((prod) => 
+                prod.nombre.includes(nombreIngresado)
+            );
+
+            console.table(listaFiltrada);
         break;
 
         case 2:
             let cate = prompt('Ingrese la categoría:');
-            productos.forEach((prod) => {
-                if(prod.categoria == cate){
-                    prod.mostrarProducto();
-                }
-            });
+
+            let listaFiltrada2 = productos.filter((prod)=>
+                prod.categoria == cate
+            );
+
+            console.table(listaFiltrada2);
         break;
  
         case 3:
             let precio = parseFloat(prompt('Ingrese el precio máximo:'));
-            productos.forEach((prod) => {
-                if(prod.precio <= precio){
-                    prod.mostrarProducto();
-                }
-            });
+
+            let listaFiltrada3 = productos.filter((prod) =>
+                prod.precio <= precio
+            );
+
+            console.table(listaFiltrada3);
         break;
     }
 }
